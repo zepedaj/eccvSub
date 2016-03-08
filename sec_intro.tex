@@ -1,0 +1,20 @@
+\section{Introduction}
+The exemplar SVM (E-SVM) was first introduced by Malisiewicz et al. in \cite{Efros11} as a conceptually simple framework for object detection and image classification where the training set has a small ratio of positive/negative examples. 
+At training time, many SVMs are learned from a large pool of negative against a single positive (so called exemplar). 
+At test time, the scores of the test images for each classifier are fitted by a logistic regression. 
+The final score of an image is then a non-linear combination of scores from multiples exemplar SVMs.
+
+They have also been used in \cite{Efros12} in image retrieval tasks, using the classifier score to rank matching candidates.
+However this transfer of information from classification to retrieval is severely limited. 
+Indeed, the purpose of a support vector machine is to separate positive and negative samples, i.e., predict discrete labels. 
+The distance between a negative sample and the classification hyperplane has no value as a measure of has \emph{a priori} no value of continuous matching score.
+
+Zepeda et al. address this problem in \cite{ZePe15} by firstly, performing an E-SVM to each image in a dataset instead of only for the query images and secondly, comparing its classifiers distance to the query's classifier instead of comparing scores. 
+These modifications guarantee we are ranking distances between two points instead of classification scores.
+Therefore \cite{ZePe15} refers to E-SVMs as features encoders: a pipeline that takes an image representation as input and returns an improved image representation. This type of feature enhancing is more akin to methods such as whitening, PCA and LDA.
+
+This paper introduces the square-loss Exemplar machine (SLEM), which consists of optimizing the same cost function of a regular E-SVM where the hinge loss is replaced by the square loss. 
+The square loss version has the advantage of having a much more efficient optimization. Indeed, the minimization of its cost function is solved by a linear system and can be done for all exemplar simultaneously, whereas the regular E-SVM cost function is generally minimized one exemplar at a time, normally by stochastic gradient descent \cite{bottou10}.
+Also, for the machine learning tasks of binary classification, both regular SVM and least-squares SVM have similar performances \cite{YeXi07}.
+%Also, for the machine learning tasks of binary classification, both regular SVM and least-squares SVM have the same performance if positive and negative samples are separable and the pool of samples is linearly independent \cite{YeXi07}. 
+We also introduce a kernelized version of SLEM, efficiently implemented, that gives better results and superior scalability for large-scale image retrieval problems.
